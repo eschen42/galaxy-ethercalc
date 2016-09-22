@@ -5,6 +5,9 @@
 #   ref: https://stackoverflow.com/questions/242538/unix-shell-script-find-out-which-directory-the-script-file-resides#comment15303203_1638397
 pushd "$(dirname "$(readlink "$BASH_SOURCE" || echo "$BASH_SOURCE")")"
 GALAXY_COMPOSE_DIR=`pwd`
+if [ ! -d ${GALAXY_COMPOSE_DIR}/export ]; then
+  mkdir ${GALAXY_COMPOSE_DIR}/export
+fi
 
 # you may want to adjust this to taste; this user *MUST* exist in /etc/passwd
 DOCKER_USER=galaxy
