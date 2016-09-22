@@ -1,0 +1,93 @@
+#!/bin/sh
+set -e
+
+### BEGIN INIT INFO
+# Provides:           galaxy_stable
+# Required-Start:
+# Required-Stop:
+# Default-Start:      2 3 4 5
+# Default-Stop:       0 1 6
+# Short-Description:  Galaxy instance.
+# Description:
+#  Galaxy is an open, web-based platform for data intensive biomedical research.
+#  https://galaxyproject.org
+### END INIT INFO
+
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+
+BASE=galaxy_stable
+SCRIPT_HOME=/home/ucosm/reticulum
+
+# modify enviroment variables below (if any) in /etc/default/$BASE (/etc/default/galaxy_stable)
+GALAXY_COMPOSE=${SCRIPT_HOME}/galaxy-compose.yml
+GALAXY_START=${SCRIPT_HOME}/start.sh
+GALAXY_STOP=${SCRIPT_HOME}/stop.sh
+GALAXY_DESC="Galaxy Stable"
+GALAXY_SSD_PIDFILE=${SCRIPT_HOME}/var/run/$BASE-ssd.pid
+GALAXY_LOGFILE=${SCRIPT_HOME}/var/log/$BASE.log
+
+# Get lsb functions
+. /lib/lsb/init-functions
+
+if [ -f /etc/default/$BASE ]; then
+        . /etc/default/$BASE
+fi
+
+# Check docker is present
+if [ ! -r $GALAXY_COMPOSE ]; then
+        log_failure_msg "$GALAXY_COMPOSE not present or not executable"
+        exit 1
+fi
+
+check_init() {
+         # see also init_is_upstart in /lib/lsb/init-functions (which isn't available in Ubuntu 12.04, or we'd use it directly)
+         if [ -x /sbin/initctl ] && /sbin/initctl version 2>/dev/null | grep -q upstart; then        
+                log_failure_msg "$GALAXY_DESC is managed via upstart, try using service $BASE $1"
+                exit 1
+         fi
+}
+
+fail_unless_root() {
+        if [ "$(id -u)" != '0' ]; then
+                log_failure_msg "$GALAXY_DESC must be run as root"
+                exit 1
+        fi
+}
+
+case "$1" in
+        start)
+                check_init
+                fail_unless_root
+
+                touch "$GALAXY_LOGFILE"
+                chgrp galaxy "$GALAXY_LOGFILE"
+
+                $GALAXY_START
+                ;;
+
+        stop)
+                check_init
+                fail_unless_root
+                $GALAXY_STOP
+                ;;
+
+        restart)
+                $0 stop
+                $0 start
+                ;;
+
+        force-reload)
+                $0 restart
+                ;;
+
+        status)
+                check_init
+                docker ps
+                ;;
+
+        *)
+                echo "Usage: service $BASE {start|stop|restart|status}"
+                exit 1
+                ;;
+esac
+
