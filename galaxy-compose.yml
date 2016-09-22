@@ -20,7 +20,7 @@ galaxy:
     - "9080:80"
     - "9021:21"
   volumes:
-    - /zpdrone/drone/home/ucosm/reticulum/export:/export/
+    - ${GALAXY_COMPOSE_DIR}/export:/export/
   environment:
     # TODO update admin user identifier(s); this is a comma-separated list
     - GALAXY_CONFIG_ADMIN_USERS=you@somedomain
