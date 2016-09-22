@@ -28,3 +28,5 @@ sudo useradd -d /home/galaxy -m -u 1450 -g 1450 -s /bin/bash -c "galaxy user wit
 sudo useradd -d /home/postgres -m -u 1550 -g 1550 -s /bin/bash -c "postgres user within docker" postgres
 ```
 This can be achieved by running `add_galaxy_users.sh`.
+
+Note that the first time you run galaxy-compose.yml with docker-compose, it takes a long time because it has to build W4M, which takes longer than the timeout for `systemctl start galaxy_docker`.  So, before starting the service, run `start.sh` as root; once the docker containers have started, run `stop.sh`; then `systemctl start galaxy_docker` should succeed.
