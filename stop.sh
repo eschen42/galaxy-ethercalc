@@ -4,7 +4,8 @@
 # pushd to the directory where this script and galaxy-compose.yml both reside
 #   ref: https://stackoverflow.com/questions/242538/unix-shell-script-find-out-which-directory-the-script-file-resides#comment15303203_1638397
 pushd "$(dirname "$(readlink "$BASH_SOURCE" || echo "$BASH_SOURCE")")"
-GALAXY_COMPOSE_DIR=`pwd`
+export GALAXY_COMPOSE_DIR=`pwd`
+echo GALAXY_COMPOSE_DIR is $GALAXY_COMPOSE_DIR
 
 # you may want to adjust this to taste; this user *MUST* exist in /etc/passwd
 DOCKER_USER=galaxy
