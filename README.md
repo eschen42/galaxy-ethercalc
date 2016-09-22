@@ -6,6 +6,7 @@
 - `start.sh` - Start `galaxy-compose.yml`; must be run as root.
 - `stop.sh` -  Stop  `galaxy-compose.yml`; must be run as root.
 - `add_galaxy_users.sh` - Add users `galaxy` and `postgres` to `/etc/passwd` and `/etc/group`.
+
 ## Advice
 Ensure that you have installed "Docker Compose" as described at
 [https://docs.docker.com/compose/install](https://docs.docker.com/compose/install)
