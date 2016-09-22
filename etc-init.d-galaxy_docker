@@ -24,13 +24,31 @@ GALAXY_START=${SCRIPT_HOME}/start.sh
 GALAXY_STOP=${SCRIPT_HOME}/stop.sh
 GALAXY_DESC="Galaxy Stable"
 GALAXY_SSD_PIDFILE=${SCRIPT_HOME}/var/run/$BASE-ssd.pid
-GALAXY_LOGFILE=${SCRIPT_HOME}/var/log/$BASE.log
+GALAXY_VARDIR=${SCRIPT_HOME}/var
+GALAXY_LOGDIR=${GALAXY_VARDIR}/log
+GALAXY_LOGFILE=${GALAXY_LOGDIR}/$BASE.log
 
 # Get lsb functions
 . /lib/lsb/init-functions
 
 if [ -f /etc/default/$BASE ]; then
         . /etc/default/$BASE
+fi
+
+# Confirm that required directories are present
+if [ ! -d ${GALAXY_VARDIR} ]; then
+    mkdir ${GALAXY_VARDIR}
+fi
+if [ ! -d ${GALAXY_VARDIR} ]; then
+        log_failure_msg "Directory ${GALAXY_VARDIR} not present"
+        exit 1
+fi
+if [ ! -d ${GALAXY_LOGDIR} ]; then
+    mkdir ${GALAXY_LOGDIR}
+fi
+if [ ! -d ${GALAXY_LOGDIR} ]; then
+        log_failure_msg "Directory ${GALAXY_LOGDIR} not present"
+        exit 1
 fi
 
 # Check docker is present
