@@ -16,13 +16,19 @@ galaxy:
   # cap_drop:
   #   - ALL
   # image: workflow4metabolomics/galaxy-workflow4metabolomics
-  image: workflow4metabolomics/galaxy-workflow4metabolomics:release-2.5.1.3
+  # image: workflow4metabolomics/galaxy-workflow4metabolomics:release-2.5.1.3
+  image: eschen42/w4m
   ports:
     - "9080:80"
     - "9021:21"
   volumes:
     - ${GALAXY_COMPOSE_DIR}/export:/export/
   environment:
+    - GALAXY_CONFIG_REQUIRE_LOGIN=True
+    # I am not using condor right now, so I am switching it off here.
+    #   But also note that for Galaxy 16.07, condor 8.4.8-373513-ubuntu14 is listed as a high security vulnerability at
+    #     https://quay.io/repository/bgruening/galaxy/image/17ee75162915f5fcc8a61ca4ca538a492e9648dbbc479cf166458c4ab34c4ae1?tab=vulnerabilities
+    - NONUSE=condor
     # TODO update admin user identifier(s); this is a comma-separated list
     - GALAXY_CONFIG_ADMIN_USERS=you@somedomain
     # TODO update brand
