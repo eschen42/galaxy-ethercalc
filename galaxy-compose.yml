@@ -15,9 +15,9 @@ galaxy:
   # for some reason, cap_drop all causes the galaxy container to infinitely restart
   # cap_drop:
   #   - ALL
-  # image: workflow4metabolomics/galaxy-workflow4metabolomics
+  image: workflow4metabolomics/galaxy-workflow4metabolomics
   # image: workflow4metabolomics/galaxy-workflow4metabolomics:release-2.5.1.3
-  image: eschen42/w4m
+  # image: eschen42/w4m
   ports:
     - "9080:80"
     - "9021:21"
